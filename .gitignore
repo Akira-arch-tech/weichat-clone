@@ -137,3 +137,11 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+# macOS
+.DS_Store
+
+# WeChat clone project-specific
+backend/uploads/
+backend/data/*.db
+backend/data/*.sqlite
+backend/data/*.sqlite3
