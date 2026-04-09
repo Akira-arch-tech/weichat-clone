@@ -1,0 +1,65 @@
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  phone TEXT UNIQUE NOT NULL,
+  nickname TEXT NOT NULL,
+  password_hash TEXT NOT NULL,
+  avatar TEXT DEFAULT '',
+  wechat_id TEXT UNIQUE,
+  bio TEXT DEFAULT '',
+  region TEXT DEFAULT '',
+  cover_photo TEXT DEFAULT '',
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS friendships (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  friend_id INTEGER NOT NULL,
+  status TEXT DEFAULT 'pending',
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(user_id, friend_id)
+);
+
+CREATE TABLE IF NOT EXISTS conversations (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user1_id INTEGER NOT NULL,
+  user2_id INTEGER NOT NULL,
+  last_message TEXT DEFAULT '',
+  last_message_time DATETIME,
+  UNIQUE(user1_id, user2_id)
+);
+
+CREATE TABLE IF NOT EXISTS messages (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  conversation_id INTEGER NOT NULL,
+  sender_id INTEGER NOT NULL,
+  content TEXT NOT NULL,
+  type TEXT DEFAULT 'text',
+  is_read INTEGER DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS moments (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  content TEXT,
+  images TEXT DEFAULT '[]',
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS moment_likes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  moment_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(moment_id, user_id)
+);
+
+CREATE TABLE IF NOT EXISTS moment_comments (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  moment_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  reply_to_id INTEGER,
+  content TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
