@@ -1,7 +1,4 @@
 
- 3) `docs/demo-script.md`
-
-```markdown
 # Demo Script（3-5 分钟演示脚本）
 
 ## 0. 演示前准备（1分钟）
