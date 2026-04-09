@@ -1,5 +1,3 @@
-# User Flows（用户流程）
-
 ## Flow 1：登录并进入聊天
 
 ```mermaid
