@@ -101,6 +101,21 @@ docker-compose up -d
 停止服务：
 
 docker-compose down
+
+## 线上部署（演示链接）
+
+目标：别人用手机/电脑打开一个 **HTTPS 公网地址** 就能点完整流程（登录、聊天、通讯录、朋友圈）。
+
+### 推荐：单容器 Docker（根目录 `wechat-clone/Dockerfile`）
+
+- **原理（做 demo 最小要懂）**：浏览器只访问 **一个域名 + 一个端口**；页面里的接口地址用「同源相对路径」`/api/...`，由 **同一台 Node 服务** 同时返回静态页面、REST 接口和 WebSocket（Socket.io），避免公网环境下 `localhost:3001` 指到访客自己电脑的问题。
+- **Render**：在 [Render](https://render.com) 新建 Web Service，Root Directory 填 `wechat-clone`（若仓库里只有该子目录则留空），Dockerfile 选 `Dockerfile`，健康检查路径填 `/api/health`。也可使用本目录下的 `render.yaml` Blueprint。
+- **其他平台**：Railway、Fly.io、阿里云/腾讯云轻量服务器等，只要支持 Dockerfile 或自建 Docker，映射平台提供的 `PORT` 环境变量即可（后端已读取 `process.env.PORT`）。
+
+### 仍可用：双容器 `docker-compose`（本机或服务器）
+
+- 前端 nginx 已反代 `/api`、`/uploads`、`/socket.io` 到后端；构建参数 `VITE_API_URL` / `VITE_SOCKET_URL` 默认为空，浏览器走同源，适合局域网或云主机只开放 80 端口。
+
 演示账号（Demo）
 首次启动后会自动创建（若项目脚本已包含初始化逻辑）
 

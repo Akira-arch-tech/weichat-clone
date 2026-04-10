@@ -1,5 +1,6 @@
 const express = require('express');
 const http = require('http');
+const fs = require('fs');
 const { Server } = require('socket.io');
 const cors = require('cors');
 const path = require('path');
@@ -9,10 +10,9 @@ const server = http.createServer(app);
 
 const PORT = process.env.PORT || 3001;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
-
-// CORS configuration
+// 演示环境：反射请求 Origin，便于部署到任意公网域名（生产可改为固定白名单）
 const corsOptions = {
-  origin: [FRONTEND_URL, 'http://localhost:5173', 'http://localhost:80', 'http://localhost'],
+  origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -28,7 +28,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 // Socket.io setup
 const io = new Server(server, {
   cors: {
-    origin: [FRONTEND_URL, 'http://localhost:5173', 'http://localhost:80', 'http://localhost'],
+    origin: true,
     credentials: true,
     methods: ['GET', 'POST']
   }
@@ -51,9 +51,24 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString() });
 });
 
+// 单端口部署：托管前端构建产物（React Router）
+const STATIC_WEB_ROOT = process.env.STATIC_WEB_ROOT;
+if (STATIC_WEB_ROOT && fs.existsSync(STATIC_WEB_ROOT)) {
+  const absWeb = path.resolve(STATIC_WEB_ROOT);
+  app.use(express.static(absWeb, { index: false }));
+  app.use((req, res, next) => {
+    if (req.method !== 'GET' && req.method !== 'HEAD') return next();
+    if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) return next();
+    res.sendFile(path.join(absWeb, 'index.html'), (err) => (err ? next(err) : undefined));
+  });
+}
+
 // 404 handler
 app.use((req, res) => {
-  res.status(404).json({ error: '接口不存在' });
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ error: '接口不存在' });
+  }
+  res.status(404).type('text').send('Not found');
 });
 
 // Error handler
@@ -64,7 +79,11 @@ app.use((err, req, res, next) => {
 
 server.listen(PORT, () => {
   console.log(`微信克隆后端服务已启动，端口: ${PORT}`);
-  console.log(`允许的前端域名: ${FRONTEND_URL}`);
+  if (STATIC_WEB_ROOT && fs.existsSync(STATIC_WEB_ROOT)) {
+    console.log(`静态站点目录: ${path.resolve(STATIC_WEB_ROOT)}`);
+  } else {
+    console.log(`参考前端地址 FRONTEND_URL: ${FRONTEND_URL}`);
+  }
 });
 
 module.exports = { app, server };

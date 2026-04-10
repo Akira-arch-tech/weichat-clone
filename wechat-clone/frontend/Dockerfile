@@ -2,8 +2,9 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-ARG VITE_API_URL=http://localhost:3001
-ARG VITE_SOCKET_URL=http://localhost:3001
+# 默认空字符串：浏览器走同源，由 nginx 反代到 backend（公网访问勿写 localhost）
+ARG VITE_API_URL=
+ARG VITE_SOCKET_URL=
 
 ENV VITE_API_URL=$VITE_API_URL
 ENV VITE_SOCKET_URL=$VITE_SOCKET_URL

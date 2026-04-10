@@ -1,0 +1,17 @@
+# Render Blueprint：仓库根目录选为 wechat-clone 时使用
+# https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: wechat-clone-demo
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: STATIC_WEB_ROOT
+        value: /app/public

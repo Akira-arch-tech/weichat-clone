@@ -1,6 +1,12 @@
 import { io } from 'socket.io-client';
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3001';
+function getSocketUrl() {
+  const v = import.meta.env.VITE_SOCKET_URL;
+  if (v !== undefined && v !== '') return v;
+  if (import.meta.env.DEV) return 'http://localhost:3001';
+  if (typeof window !== 'undefined') return window.location.origin;
+  return 'http://localhost:3001';
+}
 
 let socket = null;
 
@@ -13,7 +19,7 @@ export function connectSocket(token) {
     return socket;
   }
 
-  socket = io(SOCKET_URL, {
+  socket = io(getSocketUrl(), {
     auth: { token },
     transports: ['websocket', 'polling'],
     reconnection: true,
