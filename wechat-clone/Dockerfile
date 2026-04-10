@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends python3 make g+
 WORKDIR /app
 COPY backend/package*.json ./
 RUN npm ci --omit=dev
-COPY backend/ ./
+COPY backend/src ./src
+RUN mkdir -p data uploads
 COPY --from=frontend-builder /app/dist ./public
 ENV NODE_ENV=production
 ENV STATIC_WEB_ROOT=/app/public
