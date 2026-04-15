@@ -6,6 +6,7 @@ RUN npm ci
 COPY frontend/ ./
 ENV VITE_API_URL=
 ENV VITE_SOCKET_URL=
+ENV VITE_BASE_PATH=/
 RUN npm run build
 
 FROM node:18-bullseye-slim

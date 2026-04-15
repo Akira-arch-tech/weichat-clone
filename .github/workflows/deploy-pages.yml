@@ -36,6 +36,8 @@ jobs:
       - name: Build frontend
         working-directory: wechat-clone/frontend
         run: npm run build
+        env:
+          VITE_BASE_PATH: /weichat-clone/
 
       - name: Add SPA fallback
         run: cp wechat-clone/frontend/dist/index.html wechat-clone/frontend/dist/404.html
