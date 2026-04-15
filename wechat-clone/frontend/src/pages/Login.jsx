@@ -129,6 +129,9 @@ export default function Login() {
           <p style={{ fontSize: 12, color: '#999', margin: '4px 0 0', textAlign: 'center' }}>
             统一密码：123456
           </p>
+          <p style={{ fontSize: 12, color: '#FA5151', margin: '8px 0 0', textAlign: 'center', lineHeight: 1.5 }}>
+            安全提示：仅用于公开演示，请勿输入任何真实账号密码
+          </p>
         </div>
       </div>
     </div>
