@@ -1,5 +1,8 @@
 import { io } from 'socket.io-client';
 
+const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === 'true' ||
+  (typeof window !== 'undefined' && window.location.hostname.includes('github.io'));
+
 function getSocketUrl() {
   const v = import.meta.env.VITE_SOCKET_URL;
   if (v !== undefined && v !== '') return v;
@@ -15,6 +18,17 @@ export function getSocket() {
 }
 
 export function connectSocket(token) {
+  if (DEMO_MODE) {
+    socket = {
+      connected: false,
+      on: () => {},
+      off: () => {},
+      emit: () => {},
+      disconnect: () => {},
+    };
+    return socket;
+  }
+
   if (socket && socket.connected) {
     return socket;
   }
