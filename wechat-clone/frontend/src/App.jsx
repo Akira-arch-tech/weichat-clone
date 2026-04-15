@@ -51,7 +51,7 @@ export default function App() {
   }, [token]);
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <div className="min-h-screen bg-[#EDEDED] flex justify-center">
         <div className="w-full max-w-[390px] min-h-screen flex flex-col bg-[#EDEDED] relative">
           <Routes>

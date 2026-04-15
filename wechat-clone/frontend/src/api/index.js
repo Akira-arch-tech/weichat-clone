@@ -35,7 +35,8 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('wechat_token');
       localStorage.removeItem('wechat_user');
-      window.location.href = '/login';
+      const loginPath = `${import.meta.env.BASE_URL}login`;
+      window.location.href = loginPath;
     }
     return Promise.reject(error);
   }
