@@ -44,6 +44,23 @@
 
 ---
 
+## Render 一键同步部署（推荐）
+
+你已经可以使用 GitHub 账号直接在 Render 里同步部署：
+
+1. 打开 `https://dashboard.render.com/`
+2. 点击 `New +` -> `Blueprint`
+3. 选择本仓库：`Akira-arch-tech/weichat-clone`
+4. Render 会自动识别仓库根目录的 `render.yaml` 并创建服务
+5. 首次部署成功后，每次 `push main` 会自动触发更新
+
+说明：
+- 本仓库已提供根目录 `render.yaml`，无需手动填写 Docker 路径
+- 健康检查地址：`/api/health`
+- 部署后可通过 Render 给出的公网 URL 进行真实在线登录演示
+
+---
+
 ## 技术栈
 
 ### 前端（Frontend）

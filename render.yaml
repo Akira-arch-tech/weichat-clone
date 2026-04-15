@@ -1,0 +1,17 @@
+# Render Blueprint（仓库根目录）
+# 直接在 Render 选择 "New + -> Blueprint"，指向本仓库即可一键创建服务
+services:
+  - type: web
+    name: weichat-clone-demo
+    runtime: docker
+    dockerfilePath: ./wechat-clone/Dockerfile
+    dockerContext: ./wechat-clone
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: STATIC_WEB_ROOT
+        value: /app/public
